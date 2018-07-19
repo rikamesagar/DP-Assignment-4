@@ -40,3 +40,7 @@ term of Big O complexity (time and/or space)
 Provide list of citations (urls, etc.) from where you have taken code
 (if any).
 
+http://www.newthinktank.com/2012/11/visitor-design-pattern-tutorial/
+https://en.wikipedia.org/wiki/Visitor_pattern
+https://www.tutorialspoint.com/design_pattern/visitor_pattern.htm
+https://www.geeksforgeeks.org/visitor-design-pattern/
