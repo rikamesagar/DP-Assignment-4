@@ -14,8 +14,8 @@ public class MyVector {
         visitor.visit(this);
     }
 
-    public void add(Integer elem) {
-        myVector.add(elem);
+    public void add(Integer elementIn) {
+        myVector.add(elementIn);
     }
     public Vector<Integer> getMyVector(){
         return myVector;
