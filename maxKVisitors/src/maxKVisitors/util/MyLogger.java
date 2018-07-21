@@ -2,7 +2,7 @@
  *Class to create log messages and write to the log file
  */
 
-package util;
+package maxKVisitors.util;
 
 public class MyLogger {
     public static enum DebugLevel { CONSTRUCTOR, FILE_PROCESSOR,NOOUTPUT
