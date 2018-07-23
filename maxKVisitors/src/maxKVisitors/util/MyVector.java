@@ -2,11 +2,16 @@ package maxKVisitors.util;
 
 import java.util.Vector;
 
-public class MyVector {
-
+/**
+ * MyVector class for MyVector data structure
+ */
+public class MyVector implements Visitable {
+    MyLogger logger;
     private Vector<Integer> myVector;
 
     public MyVector() {
+
+        logger.writeMessage("Constructor for MyVector called",logger.convertToDebugVal(2));
         myVector = new Vector<Integer>();
     }
 

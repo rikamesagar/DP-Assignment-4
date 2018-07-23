@@ -1,4 +1,4 @@
-<project name="maxKVisitors" default="compile_all" basedir="..">
+<project name="maxKVisitors" default="compile_all" basedir="../../..">
 
   <property name="BUILD.compiler"       value="modern"/>
   <property name="src"                  value="src"/>

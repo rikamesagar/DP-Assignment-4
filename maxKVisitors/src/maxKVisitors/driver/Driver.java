@@ -1,152 +1,88 @@
+package maxKVisitors.driver;
+
+import java.io.IOException;
+
+import maxKVisitors.util.FileProcessor;
 /**
- *This file contains the main method
- *It creates the instance of TreeBuilder and Results
+ * Importing the required files from the package
+ */
+import maxKVisitors.util.MyVector;
+import maxKVisitors.util.MyArray;
+import maxKVisitors.util.PopulateVisitor;
+import maxKVisitors.util.MaxHeapVisitor;
+import maxKVisitors.util.ModifiedBubbleSortVisitor;
+import maxKVisitors.util.Visitable;
+import maxKVisitors.util.Visitor;
+import maxKVisitors.util.MyLogger;
+import maxKVisitors.util.Results;
+
+/**
+ * Driver class containing the main()
  */
 
-package driver;
+public class Driver {
 
+	public static void main(String args[]) {
+		if( args.length != 3){
+			System.err.println("Please enter 3 arguments");
+			System.exit(1);
+		}
+
+		int k = 0;
+		try{
+			k = Integer.parseInt( args[1]);
+		}catch (Exception e){
+
+			System.err.println("invalid format of K.");
+			System.exit(1);
+		}
+
+		if(args[0].equals("")) {
+			System.err.println(" filename is empty.");
+			System.exit(1);
+		}
+
+		int debugValue = 0;
+		if(args.length == 3) {
+			try {
+				debugValue = Integer.parseInt(args[2]);
+			} catch (NumberFormatException e) {
+
+				System.out.println("DEBUG_VALUE is not a number." + " Range of DEBUG_VALUE is 0 to 2");
+				return;
+			}
+			if(debugValue < 0 || debugValue > 2) {
+				System.out.println("Invalid range. Range of DEBUG_VALUE is 0 to 2");
+				return;
+			}
+
+		}
 /**
- *Importing TreeBuilder and Results from respective packages
+ * Objects for various classes declared and used
  */
-import util.TreeBuilder;
-import util.Results;
-import util.FileProcessor;
-import myTree.Node;
+		System.out.println("Debug Value is "+ debugValue);
+		MyLogger.setDebugValue(debugValue);
+		Results output = new Results(args[2]);
+		FileProcessor fp = new FileProcessor(args[0]);
+		Visitor populateVisitor = null;
+		populateVisitor = new PopulateVisitor(fp); //, new FileProcessor(args[1]));
 
-public class Driver{
+		Visitable vector = new MyVector();
+		Visitable array = new MyArray();
 
-	public static void main(String[] args) {
+		//Visitor maxHeapVisitor = new MaxHeapVisitor(k);
+		Visitor bubbleSortVisitor = new ModifiedBubbleSortVisitor(k);
 
+		vector.accept(populateVisitor);
 
-        /**
-         *String Variables for the files red from the command line arguments
-         */
-		String inputFile = null;
-		String deleteFile = null;
-		String output1;
-		String output2;
-		String output3;
+		fp = new FileProcessor(args[0]);
+		populateVisitor = new PopulateVisitor(fp);
+		array.accept(populateVisitor);
 
-        /**
-         *Code to check the files if/ if not passed through arguments
-         */
-		try {
-			inputFile = args[0];
-			if (!(inputFile.equals("input.txt"))) {
-				System.out.println("Input File not found, please check!");
-				System.exit(0);
-			}
-		} catch (Exception e) {
-			System.out.println("Output File not Found, please check!");
-			System.exit(0);
-		}
-		try {
-			deleteFile = args[1];
-			if (!(deleteFile.equals("delete.txt"))) {
-				System.out.println("Delete File not found, please check!");
-				System.exit(0);
-			}
-		} catch (Exception e) {
-			System.out.println("No file present to delete values from Nodes");
-			System.exit(0);
-		}
-		try {
-			output1 = args[2];
-			if (!(output1.equals("output1.txt"))) {
-				System.out.println("No Output File found, please check!");
-				System.exit(0);
-			}
-		} catch (Exception e) {
-			System.out.println("Output File not found, please check");
-			System.exit(0);
-		}
-		try {
-			output2 = args[3];
-			if (!(output2.equals("output2.txt"))) {
-				System.out.println("Output File not found, please check");
-				System.exit(0);
-			}
-		} catch (Exception e) {
-			System.out.println("Output File not found, please check!");
-			System.exit(0);
-		}
-		try {
-			output3 = args[4];
-			if (!(output3.equals("output3.txt"))) {
-				System.out.println("Output File not found, please check");
-				System.exit(0);
-			}
-		} catch (Exception e) {
-			System.out.println("Output File not found, please check");
-			System.exit(0);
-		}
+		//vector.accept(maxHeapVisitor);
+		//array.accept(maxHeapVisitor);
 
-        /**
-         *TreeBuilder and Results objects created and respective methods called
-         */
-        String line, course;
-        int bNumber;
-        // File Processors
-        FileProcessor inputFileProcessor = new FileProcessor();
-        FileProcessor deleteFileProcessor = new FileProcessor();
-
-        // TreeBuilder objects
-        TreeBuilder tree = new TreeBuilder();
-        TreeBuilder backup1 = new TreeBuilder();
-        TreeBuilder backup2 = new TreeBuilder();
-
-        // Node objects
-        Node node = null;
-        Node nodeBackup1 = null;
-        Node nodeBackup2 = null;
-        Node currentNode = null;
-        boolean present = true;
-
-        // Results Object
-        Results result1 = null;
-        Results result2 = null;
-        Results result3 = null;
-
-        while ((line = inputFileProcessor.readLine(inputFile)) != null) {
-            try {
-                bNumber = Integer.parseInt(line.split(":")[0].trim());
-                course = line.split(":")[1].trim();
-                currentNode = tree.searchNode(bNumber);
-
-                if(course.matches("[A-K]")) {
-                    if (currentNode != null) {
-                        if(!currentNode.coursesAssigned.contains(course)) {
-                            currentNode.coursesAssigned.add(course);
-                            currentNode.backupNodesList.get(0).coursesAssigned.add(course);
-                            currentNode.backupNodesList.get(1).coursesAssigned.add(course);
-                        }
-                    } else {
-                        node = new Node(bNumber, course);
-                        nodeBackup1 = (Node) node.clone();
-                        nodeBackup2 = (Node) node.clone();
-                        node.registerObserver(nodeBackup1);
-                        node.registerObserver(nodeBackup2);
-                        tree.insertNode(node);
-                        backup1.insertNode(nodeBackup1);
-                        backup2.insertNode(nodeBackup2);
-                    }
-                } else {
-                    continue;
-                }
-            } catch (NumberFormatException e) {
-                e.printStackTrace();
-            }
-            Results res = new Results();
-
-            res.printToStdout("Printing elements of the Main Node\n");
-            res.printToFile("Printing elements of the Main Node\n");
-
-            res.printToStdout("___________________________________\n");
-            res.printToFile("__________________________________\n");
-
-            tree.printInorder();
-
-           // tree.deleteCreateValue(deleteFile);
-        }
+		vector.accept(bubbleSortVisitor);
+		array.accept(bubbleSortVisitor);
 	}
 }

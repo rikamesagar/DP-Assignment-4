@@ -5,7 +5,7 @@
 /**
  *
  */
-package util;
+package maxKVisitors.util;
 
 public interface FileDisplayInterface {
 
